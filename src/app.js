@@ -3,15 +3,25 @@ const express = require("express");
 //create new application of express
 
 const app = express();
-app.use("/hello",(req, res)=>{
-    res.send("Hlooo");
+
+app.get("/user", (req,res)=>{
+    res.send({firstName:"Ravi", lastName:"Kumar"});
 });
+
+app.post("/user", (req,res)=>{
+    res.send("data successfully saved to database");
+});
+
+app.delete("/user", (req,res)=>{
+    res.send("data deleted successfullly");
+});
+app.patch("/user", (req,res)=>{
+    res.send("data updated  successfullly");
+});
+
+
 
 app.use("/test",(req, res)=>{
-    res.send("hello from server");
-});
-
-app.use("/",(req, res)=>{
     res.send("heyyy namastea from dashboard");
 });
 
