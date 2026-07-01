@@ -4,25 +4,36 @@ const express = require("express");
 
 const app = express();
 
-app.get("/user", (req,res)=>{
+app.get(/ab?c/, (req,res)=>{
     res.send({firstName:"Ravi", lastName:"Kumar"});
 });
 
-app.post("/user", (req,res)=>{
-    res.send("data successfully saved to database");
+app.get(/ab+cd/, (req,res)=>{
+    res.send({firstName:"Ravi", lastName:"Kumar"});
 });
 
-app.delete("/user", (req,res)=>{
-    res.send("data deleted successfullly");
-});
-app.patch("/user", (req,res)=>{
-    res.send("data updated  successfullly");
+app.get(/a(bc)?d/, (req,res)=>{
+    res.send({firstName:"Ravi", lastName:"Kumar"});
 });
 
+app.get(/user.*profile/, (req,res)=>{
+    res.send({firstName:"Ravi", lastName:"Kumar"});
+});
+app.get(/.*fly/, (req,res)=>{
+    res.send({firstName:"Ravi", lastName:"Kumar"});
+});
+app.get("/user", (req,res)=>{
+    console.log(req.query);
+    res.send({firstName:"Ravi", lastName:"Kumar"});
+});
+app.get("/user/:userId/:name/:password", (req,res)=>{
+    console.log(req.params  );
+    res.send({firstName:"Ravi", lastName:"Kumar"});
+});
 
 
-app.use("/test",(req, res)=>{
-    res.send("heyyy namastea from dashboard");
+app.get(/.*/, (req, res) => {
+  res.status(404).send('Page Not Found');
 });
 
 
