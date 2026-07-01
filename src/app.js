@@ -4,37 +4,35 @@ const express = require("express");
 
 const app = express();
 
-app.get(/ab?c/, (req,res)=>{
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
+app.use("/user", 
+    (req,res, next)=>{
+    console.log("handling route 1");
+    // res.send("response!!");
+    next();
 
-app.get(/ab+cd/, (req,res)=>{
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
-
-app.get(/a(bc)?d/, (req,res)=>{
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
-
-app.get(/user.*profile/, (req,res)=>{
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
-app.get(/.*fly/, (req,res)=>{
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
-app.get("/user", (req,res)=>{
-    console.log(req.query);
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
-app.get("/user/:userId/:name/:password", (req,res)=>{
-    console.log(req.params  );
-    res.send({firstName:"Ravi", lastName:"Kumar"});
-});
-
-
-app.get(/.*/, (req, res) => {
-  res.status(404).send('Page Not Found');
-});
+},
+ 
+ (req,res,next)=>{
+    console.log("handling route 2");
+    // res.send("2nd response");
+    next();
+ },
+ (req,res,next)=>{
+    console.log("handling route 3");
+    // res.send("3nd response");
+    next();
+ },
+ (req,res,next)=>{
+    console.log("handling route 4");
+    // res.send("4nd response");
+    next();
+ },
+ (req,res,next)=>{
+    console.log("handling route 5");
+     res.send("5nd response");
+     next();
+ }
+);
 
 
 app.listen(8888, ()=>{
