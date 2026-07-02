@@ -4,35 +4,32 @@ const express = require("express");
 
 const app = express();
 
-app.use("/user", 
-    (req,res, next)=>{
-    console.log("handling route 1");
-    // res.send("response!!");
-    next();
+// Handle Auth middleware for GET<POST,.. requests
 
-},
- 
- (req,res,next)=>{
-    console.log("handling route 2");
-    // res.send("2nd response");
-    next();
- },
- (req,res,next)=>{
-    console.log("handling route 3");
-    // res.send("3nd response");
-    next();
- },
- (req,res,next)=>{
-    console.log("handling route 4");
-    // res.send("4nd response");
-    next();
- },
- (req,res,next)=>{
-    console.log("handling route 5");
-     res.send("5nd response");
-     next();
- }
-);
+app.use("/admin",(req,res, next)=>{
+   console.log("admin auth is getting checked");
+   const token = "xyz";
+  const isAdminAuthorized = token === "xyz";
+
+  if(!isAdminAuthorized){
+   res.status(401).send("unauthorized request");
+  }
+  else{
+   next();
+  }
+});
+
+app.get("/admin/getAllData", (req,res)=>{
+   //logic of checkeing if the request is Authorized
+  
+   res.send("All data sent");
+  
+
+});
+
+app.get("/admin/deleteuser", (req,res)=>{ 
+  res.send("Delete a user");  
+});
 
 
 app.listen(8888, ()=>{
