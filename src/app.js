@@ -19,12 +19,11 @@ app.use("/admin",(req,res, next)=>{
   }
 });
 
+app.get("/user", (req,res)=>{
+   res.send("user data sent");
+});
 app.get("/admin/getAllData", (req,res)=>{
-   //logic of checkeing if the request is Authorized
-  
    res.send("All data sent");
-  
-
 });
 
 app.get("/admin/deleteuser", (req,res)=>{ 
