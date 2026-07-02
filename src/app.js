@@ -1,30 +1,36 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth");
 
 
 //create new application of express
 
 const app = express();
 
-// Handle Auth middleware for GET<POST,.. requests
-
-app.use("/admin",adminAuth);
-// app.use("/user",userAuth);
-
-app.get("/user/login", (req,res)=>{
-   res.send("user logged in successfully");
-});
-app
-
-app.get("/user/data",userAuth, (req,res)=>{
-   res.send("user data sent");
-});
-app.get("/admin/getAllData", (req,res)=>{
-   res.send("All data sent");
+app.use("/",(err,req,res,next)=>{
+   if(err){
+      // alo log errors and can send some alarts
+      
+      res.status(500).send("something went wrong");
+   }
 });
 
-app.get("/admin/deleteuser", (req,res)=>{ 
-  res.send("Delete a user");  
+
+app.get("/getUserData", (req,res)=>{
+   // try{
+      throw new Error("hgdsjfg");
+      res.send("user Data sent");
+    
+   // }
+   // catch(err){
+   //    res.status(500).send("some Eroor contact support team")
+   // }
+   res.send("user Data sent");
+});
+
+app.use("/",(err,req,res,next)=>{
+   if(err){
+      // alo log errors and can send some alarts
+      res.status(500).send("something went wrong");
+   }
 });
 
 
