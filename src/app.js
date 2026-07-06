@@ -1,39 +1,38 @@
 const express = require("express");
+const dns = require('node:dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']); 
 
-
-//create new application of express
-
+const connectDB = require("./config/database");
 const app = express();
+const User =require("./modals/user");
 
-app.use("/",(err,req,res,next)=>{
-   if(err){
-      // alo log errors and can send some alarts
-      
-      res.status(500).send("something went wrong");
-   }
+app.use("/signup", async (req,res)=>{
+  const user = new User({
+    firstName : "Dharmana",
+    lastName:"ravikumar",
+    emailId: "ravikumardharmana25@gmail.com",
+    password:"ravikumar",
+    phoneNumber:"7658904332"
+  });
+  try{
+    await user.save();
+  res.send("user data added successfully");
+  }
+  catch(err){
+    res.status(500).send("error saving the user " + error.message);
+  }
+   
 });
 
 
-app.get("/getUserData", (req,res)=>{
-   // try{
-      throw new Error("hgdsjfg");
-      res.send("user Data sent");
-    
-   // }
-   // catch(err){
-   //    res.status(500).send("some Eroor contact support team")
-   // }
-   res.send("user Data sent");
-});
+connectDB().then(()=>{
+  console.log("database established successfully..");
+  app.listen(8888,()=>{
+  console.log("server listens port at 8888..");
+})
+})
+.catch((err)=>{
+  console.error("database cannot be established");
+  console.error("actual error", err);
+})
 
-app.use("/",(err,req,res,next)=>{
-   if(err){
-      // alo log errors and can send some alarts
-      res.status(500).send("something went wrong");
-   }
-});
-
-
-app.listen(8888, ()=>{
-    console.log("server is successfully listen at port 8888...");
-});
