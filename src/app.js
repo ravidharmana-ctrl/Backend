@@ -5,15 +5,11 @@ dns.setServers(['8.8.8.8', '1.1.1.1']);
 const connectDB = require("./config/database");
 const app = express();
 const User =require("./modals/user");
+app.use(express.json());
 
 app.use("/signup", async (req,res)=>{
-  const user = new User({
-    firstName : "Dharmana",
-    lastName:"ravikumar",
-    emailId: "ravikumardharmana25@gmail.com",
-    password:"ravikumar",
-    phoneNumber:"7658904332"
-  });
+  // console.log(req.body);
+  const user = new User(req.body);
   try{
     await user.save();
   res.send("user data added successfully");
