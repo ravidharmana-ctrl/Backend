@@ -20,6 +20,63 @@ app.use("/signup", async (req,res)=>{
    
 });
 
+app.get("/user", async (req,res)=>{
+  const userEmail = req.body.emailId;
+try{
+  console.log(userEmail);
+  const user = await User.findOne({emailId:userEmail});
+  res.send(user);
+//   if(users.length=== 0){
+//     res.status(404).send("user not found");
+//   }
+//   else{
+//     res.send(users);
+//   }
+  
+ }
+catch(err){
+  res.status(400).send("someting went wrong");
+
+}
+});
+// to get all the users from the database
+app.get("/feed",async (req,res)=>{
+ try{
+  const users = await User.find({});
+  res.send(users);
+
+ }
+ catch(err){
+  res.status(404).send("something went wrong");
+ }
+});
+
+app.delete("/user",async (req,res)=>{
+  const userId = req.body.userId;
+  try{
+    const user = await User.findByIdAndDelete(userId);
+    // const user = await User.findByIdAndDelete({_id:userId});
+    res.send("user deleted successfully");
+  }
+  catch(err){
+    res.status(404).send("something went wrong");
+  }
+});
+
+app.patch("/user",async (req,res)=>{
+  const userId =req.body.userId;
+  const data = req.body;
+  console.log(data);
+  try{
+    const user = await User.findByIdAndUpdate({_id:userId},data);
+    // const user = await User.findByIdAndDelete({_id:userId});
+    res.send("user updated successfully");
+  }
+  catch(err){
+    res.status(404).send("something went wrong");
+  }
+
+})
 
 connectDB().then(()=>{
   console.log("database established successfully..");
