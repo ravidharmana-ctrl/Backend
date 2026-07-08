@@ -5,6 +5,7 @@ dns.setServers(['8.8.8.8', '1.1.1.1']);
 const connectDB = require("./config/database");
 const app = express();
 const User =require("./modals/user");
+const { after } = require("node:test");
 app.use(express.json());
 
 app.use("/signup", async (req,res)=>{
@@ -15,7 +16,8 @@ app.use("/signup", async (req,res)=>{
   res.send("user data added successfully");
   }
   catch(err){
-    res.status(500).send("error saving the user " + error.message);
+    res.status(500).send("error saving the user " + err.message);
+    
   }
    
 });
@@ -66,17 +68,21 @@ app.delete("/user",async (req,res)=>{
 app.patch("/user",async (req,res)=>{
   const userId =req.body.userId;
   const data = req.body;
-  console.log(data);
+  // console.log(data);
   try{
-    const user = await User.findByIdAndUpdate({_id:userId},data);
+    const user = await User.findByIdAndUpdate({_id:userId},data,{
+      returnDocument: "after",
+      runValidators:true,
+    });
     // const user = await User.findByIdAndDelete({_id:userId});
+    console.log(user);
     res.send("user updated successfully");
   }
   catch(err){
     res.status(404).send("something went wrong");
   }
 
-})
+});
 
 connectDB().then(()=>{
   console.log("database established successfully..");
