@@ -20,7 +20,7 @@ if(!user){
   throw new Error("user not present");
 }
 
-req.user =user;
+req.user = user;
 next();
 }catch(err){
   res.status(400).send("Error:" +err.message);
