@@ -34,11 +34,15 @@ const userSchema = new mongoose.Schema({
    gender:{
     type : String,
     //custom validation
-    validate(value){
-        if(!["male", "female","other"].includes(value)){
-            throw new Error("Gender data is not valid");
-        }
+    enum:{
+        values: ["male", "female","other"],
+        message: `{VALUE}  is not valid gender type`
     },
+    // validate(value){
+    //     if(!["male", "female","other"].includes(value)){
+    //         throw new Error("Gender data is not valid");
+    //     }
+    // },
    },
    password:{
     type:String,
@@ -68,9 +72,12 @@ const userSchema = new mongoose.Schema({
    skills:{
     type:[String],
    },
-},{
+   },{
     timestamps:true,
 });
+
+userSchema.index({firstName: 1});
+userSchema.index({gender:1}); 
 
 userSchema.methods.getJWT = async function (){
     const user = this;
