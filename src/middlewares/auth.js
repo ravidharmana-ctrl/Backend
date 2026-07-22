@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../modals/user");
+
+
+
 const userAuth = async(req,res, next)=>{
 //Read the token from the request cookies
 
