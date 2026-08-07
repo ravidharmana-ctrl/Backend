@@ -1,106 +1,105 @@
-const mongoose =require("mongoose");
+const mongoose = require("mongoose");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-    firstName :{
-        type : String,
-        required:true,
-        minLength:4,
-        maxLength:50,
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      minLength: 4,
+      maxLength: 50,
     },
-    lastName:{
-        type : String,
-        required:true,
+    lastName: {
+      type: String,
     },
-    emailId:{
-        type : String,
-        required: true,
-        unique :true,
-        lowercase: true,
-        trim:true,
-        validate(value){
-            if(!validator.isEmail(value)){
-                throw new Error("invallid email address:" + value);
-            }
+    emailId: {
+      type: String,
+      lowercase: true,
+      required: true,
+      unique: true,
+      trim: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Invalid email address: " + value);
         }
+      },
     },
-    age :{
-        type: Number,
-        min:18,
-        max:100, 
-    },
-   gender:{
-    type : String,
-    //custom validation
-    enum:{
-        values: ["male", "female","other"],
-        message: `{VALUE}  is not valid gender type`
-    },
-    // validate(value){
-    //     if(!["male", "female","other"].includes(value)){
-    //         throw new Error("Gender data is not valid");
-    //     }
-    // },
-   },
-   password:{
-    type:String,
-    required:true,
-    validate(value){
-            if(!validator.isStrongPassword(value)){
-                throw new Error("not a strong password, please enter strong password:" + value);
-            }
+    password: {
+      type: String,
+      required: true,
+      validate(value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("Enter a Strong Password: " + value);
         }
-   },
-   phoneNumber:{
-    type: Number,
-   },
-   photoUrl:{
-    type:String,
-    default:"https://www.shutterstock.com/image-vector/isolated-object-avatar-dummy-symbol-260nw-1290296656.jpg",
-    validate(value){
-            if(!validator.isURL(value)){
-                throw new Error("invalid photo Url:" + value);
-            }
+      },
+    },
+    age: {
+      type: Number,
+      min: 18,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ["male", "female", "other"],
+        message: `{VALUE} is not a valid gender type`,
+      },
+      // validate(value) {
+      //   if (!["male", "female", "others"].includes(value)) {
+      //     throw new Error("Gender data is not valid");
+      //   }
+      // },
+    },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    membershipType: {
+      type: String,
+    },
+    photoUrl: {
+      type: String,
+      default: "https://geographyandyou.com/images/user-profile.png",
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("Invalid Photo URL: " + value);
         }
-   },
-   about:{
-    type: String,
-    default: "This is the Default of the User!",
-   },
-   skills:{
-    type:[String],
-   },
-   },{
-    timestamps:true,
-});
-
-userSchema.index({firstName: 1});
-userSchema.index({gender:1}); 
-
-userSchema.methods.getJWT = async function (){
-    const user = this;
-    const token =  await jwt.sign({_id: user._id}, "DEV@Tinder$790",{
-        expiresIn: "7d",
-      } );
-
-      return token;
-};
-
-userSchema.methods.validateapassword = async function (passwordInputByuser){
-    const user = this;
-    const passwordHash = user.password;
-const isPasswordValid = await bcrypt.compare(
-    passwordInputByuser, 
-    passwordHash
+      },
+    },
+    about: {
+      type: String,
+      default: "This is a default about of the user!",
+    },
+    skills: {
+      type: [String],
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
-return isPasswordValid;
+userSchema.methods.getJWT = async function () {
+  const user = this;
 
-}
+  const token = await jwt.sign({ _id: user._id }, "DEV@Tinder$790", {
+    expiresIn: "7d",
+  });
 
-// const User = mongoose.model("User",userSchema);
-// module.exports = User;
+  return token;
+};
 
-module.exports =mongoose.model("User",userSchema);
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+  const user = this;
+  const passwordHash = user.password;
+
+  const isPasswordValid = await bcrypt.compare(
+    passwordInputByUser,
+    passwordHash
+  );
+
+  return isPasswordValid;
+};
+
+module.exports = mongoose.model("User", userSchema);

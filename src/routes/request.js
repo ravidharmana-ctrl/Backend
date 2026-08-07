@@ -12,7 +12,7 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth,async (req, res)=
     const toUserId = req.params.toUserId;
     const status = req.params.status;
 
-    const allowedStatus = ["ignored", "intrested"];
+    const allowedStatus = ["ignored", "interested"];
     if(!allowedStatus.includes(status)){
       return res.status(400).json({
         message:"Inavlid status type:" + status});
@@ -72,7 +72,7 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async (req, r
   const connectionRequest = await ConnectionRequest.findOne({
     _id: requestId,
     toUserId: loggedInUser._id,
-    status: "intrested",
+    status: "interested",
   });
   if(!connectionRequest){
     return res.status(400).json({
